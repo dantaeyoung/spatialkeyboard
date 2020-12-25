@@ -1,6 +1,9 @@
 const io = require('socket.io-client');
 
-const socket = io("http://localhost:3000");
+const PORT = 3000;
+const IP = "10.0.1.3"
+
+const socket = io(`http://${IP}:${PORT}`);
 
 socket.on("connect", () => {
   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
@@ -19,6 +22,9 @@ socket.on("hello", (arg) => {
   console.log(arg); // world
 });
 
-socket.on("x", (arg) => {
-  console.log(arg); // world
+
+///
+
+socket.on("mousemove", (arg) => {
+  console.log(arg); 
 });

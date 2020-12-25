@@ -1,20 +1,23 @@
 const ioHook = require('iohook');
 const socket = require('socket.io');
+const ip = require('ip');
+
 
 const io = socket();
 
-global.socket = null;
+const PORT = 3000;
 
 
 
 function initSocket(vars, cb) {
   return new Promise(function(resolve, reject) {
 
-    vars.blah = "boo";
+    io.listen(PORT);
+    console.log(`Started server at: ${ip.address()}:${PORT}`);
+    console.log(ip.address())
 
     io.on('connection', (socket) => {
 
-      vars.socket = socket;
 
       console.log(global);
 
@@ -26,14 +29,9 @@ function initSocket(vars, cb) {
         console.log(data);
       });
 
+      vars.socket = socket;
+      resolve(vars);
     });
-
-    io.listen(3000);
-
-
-    vars.io = io;
-
-    resolve(vars);
 
   });
 }
@@ -41,31 +39,18 @@ function initSocket(vars, cb) {
 function initIoHook(vars, cb) {
   return new Promise(function(resolve, reject) {
 
-    console.log("do s!tufF");
-    vars.blah2 = "boo";
+    ioHook.start();
+
+    vars.ioHook = ioHook;
+
     resolve(vars);
 
   });
 }
 
 
-console.log("started server!");
 
 
-ioHook.on('mousemove', event => {
-//  console.log("mousemoving");
-  //socket.emit("x", event); // { type: 'mousemove', x: 700, y: 400 }
-//  global.socket.emit("x", "yo"); // { type: 'mousemove', x: 700, y: 400 }
-  console.log(event);
-});
-
-/*setTimeout(() => {
-  global.socket.emit("x", "yo"); 
-  console.log("yo");
-}, 2000);*/
-
-// Register and start hook
-ioHook.start();
 
 
 initSocket({})
@@ -74,6 +59,16 @@ initSocket({})
 
     console.log(vars);
 
-    vars.io.emit("x", "yo");
 
-  });
+    ioHook.on('mousemove', event => {
+    //  console.log("mousemoving");
+      //socket.emit("x", event); // { type: 'mousemove', x: 700, y: 400 }
+    //  global.socket.emit("x", "yo"); // { type: 'mousemove', x: 700, y: 400 }
+      vars.socket.emit("mousemove", event); // { type: 'mousemove', x: 700, y: 400 }
+      console.log(event);
+    });
+
+
+
+
+});
