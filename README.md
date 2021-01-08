@@ -8,3 +8,4 @@
 
 currently via `keyboard-server.js` and `computer-client.js`
 
+![spatial_computer_diagram.png](spatial_computer_diagram.png) 
