@@ -22,7 +22,7 @@ function initSocket(vars, cb) {
         console.log('received: %s', message);
       });
 
-      ws.send('something');
+      ws.send('{ "hello": "world" }');
 
       vars.ws = ws;
 
@@ -51,23 +51,25 @@ function initIoHook(vars, cb) {
 
 
 
-
 initSocket({})
   .then((res) => initIoHook(res))
   .then((vars) => {
 
     console.log(vars);
 
-
-    ioHook.on('mousemove', event => {
-    //  console.log("mousemoving");
-      //socket.emit("x", event); // { type: 'mousemove', x: 700, y: 400 }
-    //  global.socket.emit("x", "yo"); // { type: 'mousemove', x: 700, y: 400 }
+    function sendEventAsJson(event) {
+//      console.log(event);
       vars.ws.send(JSON.stringify(event)); // { type: 'mousemove', x: 700, y: 400 }
-      console.log(event);
-    });
+    }
 
-
+//    ioHook.on('keydown', sendEventAsJson);
+    ioHook.on('keyup', sendEventAsJson); 
+    ioHook.on('mouseclick', sendEventAsJson);
+//    ioHook.on('mousedown', sendEventAsJson);
+//    ioHook.on('mouseup', sendEventAsJson);
+    ioHook.on('mousemove', sendEventAsJson);
+    ioHook.on('mousedrag', sendEventAsJson);
+//    ioHook.on('mousewheel', sendEventAsJson);
 
 
 });
