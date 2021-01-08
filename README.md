@@ -1,5 +1,9 @@
 # spatialkeyboard
 
+
+![spatial_computer_diagram.png](spatial_computer_diagram.png) 
+
+
 ## Setup for dev
 
 - npm install
@@ -8,4 +12,3 @@
 
 currently via `keyboard-server.js` and `computer-client.js`
 
-![spatial_computer_diagram.png](spatial_computer_diagram.png) 
