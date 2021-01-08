@@ -1,30 +1,22 @@
-const io = require('socket.io-client');
+const WebSocket = require('ws');
 
-const PORT = 3000;
+const PORT = 8080;
 const IP = "10.0.1.3"
 
-const socket = io(`http://${IP}:${PORT}`);
-
-socket.on("connect", () => {
-  console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+console.log(`http://${IP}:${PORT}`);
+const ws = new WebSocket(`ws://${IP}:${PORT}`);
 
 
-  socket.emit("message", "hello friends!");
-
-
+ws.on('open', function open() {
+  ws.send('something');
 });
 
-socket.on('message', (data) => {
+ws.on('message', function incoming(msg) {
+  let data;
+  try {
+    data = JSON.parse(msg);
+  } catch {
+    data = msg;
+  }
   console.log(data);
-});
-
-socket.on("hello", (arg) => {
-  console.log(arg); // world
-});
-
-
-///
-
-socket.on("mousemove", (arg) => {
-  console.log(arg); 
 });

@@ -1,37 +1,36 @@
 const ioHook = require('iohook');
-const socket = require('socket.io');
+const WebSocket = require('ws');
 const ip = require('ip');
 
 
-const io = socket();
-
 const PORT = 3000;
+
+const wss = new WebSocket.Server({ port: 8080 });
 
 
 
 function initSocket(vars, cb) {
   return new Promise(function(resolve, reject) {
 
-    io.listen(PORT);
-    console.log(`Started server at: ${ip.address()}:${PORT}`);
-    console.log(ip.address())
+    wss.on('connection', function connection(ws) {
 
-    io.on('connection', (socket) => {
+      console.log(`Started server at: ${ip.address()}:${PORT}`);
+      console.log(ip.address())
 
 
-      console.log(global);
-
-      socket.emit("hello", "world");
-
-      socket.emit("greetings");
-
-      socket.on('message', (data) => {
-        console.log(data);
+      ws.on('message', function incoming(message) {
+        console.log('received: %s', message);
       });
 
-      vars.socket = socket;
+      ws.send('something');
+
+      vars.ws = ws;
+
       resolve(vars);
     });
+
+
+
 
   });
 }
@@ -64,7 +63,7 @@ initSocket({})
     //  console.log("mousemoving");
       //socket.emit("x", event); // { type: 'mousemove', x: 700, y: 400 }
     //  global.socket.emit("x", "yo"); // { type: 'mousemove', x: 700, y: 400 }
-      vars.socket.emit("mousemove", event); // { type: 'mousemove', x: 700, y: 400 }
+      vars.ws.send(JSON.stringify(event)); // { type: 'mousemove', x: 700, y: 400 }
       console.log(event);
     });
 
